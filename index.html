@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+    <!-- Calculator Table Layout -->
+    <table border="1">
+        <tr>
+            <td colspan="4">
+                <!-- Display Input Box -->
+                <input type="text" id="inputBox" value="0" readonly/>
+            </td>
+        </tr>
+        <tr>
+            <!-- Digit and Operator Buttons -->
+            <td class="digitButton" onclick="digitBtnPressed(7)">7</td>
+            <td class="digitButton" onclick="digitBtnPressed(8)">8</td>
+            <td class="digitButton" onclick="digitBtnPressed(9)">9</td>
+            <td class="operatorButton" onclick="operatorBtnPressed('*')">x</td>
+        </tr>
+        <tr>
+            <td class="digitButton" onclick="digitBtnPressed(4)">4</td>
+            <td class="digitButton" onclick="digitBtnPressed(5)">5</td>
+            <td class="digitButton" onclick="digitBtnPressed(6)">6</td>
+            <td class="operatorButton" onclick="operatorBtnPressed('-')">-</td>
+        </tr>
+        <tr>
+            <td class="digitButton" onclick="digitBtnPressed(1)">1</td>
+            <td class="digitButton" onclick="digitBtnPressed(2)">2</td>
+            <td class="digitButton" onclick="digitBtnPressed(3)">3</td>
+            <td class="operatorButton" onclick="operatorBtnPressed('+')">+</td>
+        </tr>
+        <tr>
+            <!-- Zero Button spans two columns -->
+            <td colspan="2" class="digitButton" onclick="digitBtnPressed(0)">0</td>
+            <td class="operatorButton" onclick="buttonACPressed()">AC</td>
+            <td class="operatorButton" onclick="operatorBtnPressed('/')">/</td>
+        </tr>
+        <tr>
+            <!-- Equals Button spans all columns -->
+            <td colspan="4" onclick="equalsBtnPressed()">=</td>
+        </tr>
+    </table>
+
+    <script>
+        // Track if a new number should start* Boolean variable to indicate if a new number should start
+        var newline = true;
+        // Store the current operator and operand
+        var currentOperator = null;
+        var firstOperand = null;
+
+        // Handles digit button press* Event handler for digit button presses
+        function digitBtnPressed(button) {
+            var inputBox = document.getElementById("inputBox");
+            if (newline) {
+                inputBox.value = button;
+                newline = false;
+            } else {
+                inputBox.value += button;
+            }
+        }
+
+        // Handles operator button press
+        function operatorBtnPressed(operator) {
+            var inputBox = document.getElementById("inputBox");
+            firstOperand = parseFloat(inputBox.value);
+            currentOperator = operator;
+            newline = true;
+        }
+
+        // Handles equals button press
+        function equalsBtnPressed() {
+            var inputBox = document.getElementById("inputBox");
+            var secondOperand = parseFloat(inputBox.value);
+            var result = 0;
+            // Perform calculation based on operator
+            switch (currentOperator) {
+                case '+':
+                    result = firstOperand + secondOperand;
+                    break;
+                case '-':
+                    result = firstOperand - secondOperand;
+                    break;
+                case '*':
+                    result = firstOperand * secondOperand;
+                    break;
+                case '/':
+                    result = secondOperand !== 0 ? firstOperand / secondOperand : 'Error';
+                    break;
+                default:
+                    result = secondOperand;
+            }
+            inputBox.value = result;
+            newline = true;
+            currentOperator = null;
+            firstOperand = null;
+        }
+
+        // Handles AC (All Clear) button press
+        function buttonACPressed() {
+            document.getElementById("inputBox").value = "0";
+            newline = true;
+            currentOperator = null;
+            firstOperand = null;
+        }
+    </script>
+</body>
+</html>
